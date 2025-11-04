@@ -144,6 +144,6 @@ CV_Internship/
 
 ### 👨‍💻 Author
 **UPPUTURI VASU**  
-📧 [Your Email or LinkedIn]  
+📧 vasuupputuri5@gmail.com  
 🎓 Computer Vision Internship Project  
 🗓️ November 2025
