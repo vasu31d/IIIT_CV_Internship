@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 5
+names: ['little crake', 'rustic bunting', 'white-backed woodpecker', 'white-crowned wheatear', 'white-eared bulbul']
+
+roboflow:
+  workspace: bird-detection-jpiki
+  project: proposed-rcnn-yolo-bird-dataset
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/bird-detection-jpiki/proposed-rcnn-yolo-bird-dataset/dataset/2
