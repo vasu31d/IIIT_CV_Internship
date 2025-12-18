@@ -1,0 +1,92 @@
+# ===============================
+
+# YOLO / Computer Vision .gitignore
+
+# ===============================
+
+# ---- Python ----
+
+**pycache**/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.eggs/
+
+# ---- Virtual Environments ----
+
+yoloenv/
+venv/
+.env/
+.venv/
+
+# ---- Jupyter ----
+
+.ipynb_checkpoints/
+
+# ---- IDE / Editor ----
+
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ---- OS Files ----
+
+Thumbs.db
+
+# ---- YOLO / Ultralytics ----
+
+runs/
+weights/
+*.pt
+*.onnx
+*.engine
+
+# ---- Datasets (DO NOT PUSH RAW DATA) ----
+
+datasets/
+data/
+images/
+labels/
+train/
+val/
+test/
+
+# ---- Annotations ----n*.xml
+
+*.txt
+
+# ---- Media Files ----
+
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.tiff
+*.mp4
+*.avi
+*.mov
+
+# ---- Logs & Outputs ----nlogs/
+
+*.log
+
+# ---- Archives ----
+
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# ---- Config Overrides ----
+
+*.local.yaml
+*.local.yml
+
+# ---- Cache ----
+
+.cache/
