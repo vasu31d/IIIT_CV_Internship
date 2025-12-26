@@ -1,149 +1,239 @@
-# 🤖 Computer Vision Internship Tasks :
+# 🤖 Computer Vision Internship Tasks
+
 ### 📅 Internship Project Series on Object Detection & Video Analysis
 
-This repository contains the first three tasks completed during the Computer Vision Internship.  
-Each task focuses on developing core skills in image and video-based object detection using **Python**, **YOLOv8**, and **FFmpeg**.
+This repository contains the tasks completed during the **Computer Vision Internship**.
+Each task focuses on building practical skills in **image & video object detection**, **dataset preparation**, **YOLOv8 training**, and **evaluation metrics** using **Python**, **Ultralytics YOLO**, **Label Studio**, and **FFmpeg**.
 
 ---
 
 ## 🧩 Task 1 – Image Object Detection using YOLOv8
 
 ### 🎯 Objective
-Perform object detection on images using the **YOLOv8 model** to identify and classify real-world objects.
 
-### ⚙️ Steps:
-1. Install dependencies:
-   ```bash
-   pip install ultralytics opencv-python
-   ```
-2. Load the YOLOv8 model and detect objects:
-   ```python
-   from ultralytics import YOLO
+Perform object detection on a single image using the **YOLOv8 pretrained model**.
 
-   model = YOLO("yolov8n.pt")
-   results = model("bus.jpg", show=True)
-   ```
-3. The detected image will display bounding boxes with class labels and confidence scores.
+### ⚙️ Steps
+
+```bash
+pip install ultralytics opencv-python
+```
+
+```python
+from ultralytics import YOLO
+
+model = YOLO("yolov8n.pt")
+model("bus.jpg", show=True)
+```
 
 ### 📸 Output
-- Input: `bus.jpg`  
-- Output: Detected image with bounding boxes and class names.
+
+* Detected image with bounding boxes, class names, and confidence scores
 
 ---
 
-## 🧩 Task 2 – Object Detection in Multiple Images
+## 🧩 Task 2 – Object Detection on Multiple Images
 
 ### 🎯 Objective
+
 Perform batch object detection on multiple images using YOLOv8.
 
-### ⚙️ Steps:
-1. Create a list of image URLs or local file paths.
-2. Run the detection in a loop:
-   ```python
-   from ultralytics import YOLO
-   import os, requests
+### ⚙️ Steps
 
-   model = YOLO("yolov8n.pt")
+```python
+from ultralytics import YOLO
+import os, requests
 
-   image_urls = [
-       "https://ultralytics.com/images/bus.jpg",
-       "https://ultralytics.com/images/zidane.jpg"
-   ]
+model = YOLO("yolov8n.pt")
+images = [
+    "https://ultralytics.com/images/bus.jpg",
+    "https://ultralytics.com/images/zidane.jpg"
+]
 
-   os.makedirs("results", exist_ok=True)
+os.makedirs("results", exist_ok=True)
 
-   for url in image_urls:
-       filename = os.path.join("results", os.path.basename(url))
-       with open(filename, "wb") as f:
-           f.write(requests.get(url).content)
-       model.predict(source=filename, save=True)
-   ```
-3. View all output images in the `results/` folder.
+for url in images:
+    img = url.split("/")[-1]
+    with open(img, "wb") as f:
+        f.write(requests.get(url).content)
+    model.predict(source=img, save=True)
+```
 
 ### 📸 Output
-- Input: Multiple sample images  
-- Output: Detected images with labels and bounding boxes saved in the output folder.
+
+* Multiple images detected and saved with bounding boxes
 
 ---
 
-## 🧩 Task 3 – Video Frame Extraction and Object Detection
+## 🧩 Task 3 – Video Object Detection using YOLOv8
 
 ### 🎯 Objective
-To analyze and detect objects in a video using **YOLOv8** and **FFmpeg**, then generate a processed output video with bounding boxes and labels.
+
+Detect objects in a video by extracting frames, running YOLO detection, and rebuilding a processed video.
 
 ### ⚙️ Tools Used
-- **YOLOv8 (Ultralytics)** – Object Detection  
-- **FFmpeg** – Frame extraction and video compression  
-- **Python 3.x**, **VS Code**
 
-### ⚙️ Steps:
-1. **Extract Frames from Input Video**
-   ```bash
-   ffmpeg -i input_video.mp4 frames/frame_%04d.jpg
-   ```
-2. **Run YOLOv8 Detection on Extracted Frames**
-   ```python
-   from ultralytics import YOLO
-   import os
+* YOLOv8 (Ultralytics)
+* FFmpeg
+* Python
 
-   model = YOLO("yolov8n.pt")
-   input_folder = "frames/"
-   output_folder = "detections/"
-   os.makedirs(output_folder, exist_ok=True)
+### ⚙️ Steps
 
-   for img in os.listdir(input_folder):
-       model.predict(source=os.path.join(input_folder, img), save=True, project=output_folder)
-   ```
-3. **Merge Detected Frames into Final Video**
-   ```bash
-   ffmpeg -f concat -safe 0 -i videos.txt -c copy results/detected_output.mp4
-   ```
-4. **Compress Final Video (Optional)**
-   ```bash
-   ffmpeg -i results/detected_output.mp4 -b:v 1M results/compressed_output.mp4
-   ```
+```bash
+ffmpeg -i input_video.mp4 frames/frame_%04d.jpg
+```
+
+```python
+from ultralytics import YOLO
+import os
+
+model = YOLO("yolov8n.pt")
+for img in os.listdir("frames"):
+    model.predict(source=f"frames/{img}", save=True)
+```
+
+```bash
+ffmpeg -i detected_frames/%04d.jpg detected_video.mp4
+```
 
 ### 📸 Output
-- **Input:** Raw video footage  
-- **Output:** Processed video with detected objects and optimized file size (<10 MB)
+
+* Video with bounding boxes and object labels
 
 ---
 
-## 📁 Folder Structure
+## 🧩 Task 4 – Video Frame Extraction, Dataset Creation & YOLOv8 Training
+
+### 🎯 Objective
+
+Extract frames from a video, **manually label objects**, train a **custom YOLOv8 model**, and evaluate performance using standard detection metrics.
+
+### 🏷️ Classes Detected
+
+* **Person**
+* **Bird**
+* **Boat**
+* **Sky**
+
+### 🧰 Tools Used
+
+* **YOLOv8 (Ultralytics)**
+* **Label Studio** (annotation)
+* **FFmpeg** (frame extraction & compression)
+* **Python / VS Code**
+
+---
+
+### 📂 Dataset Details
+
+* **Train:** 26 images / 26 labels
+* **Validation:** 7 images / 7 labels
+
+### 📁 Dataset Folder Structure
+
 ```
-CV_Internship/
+dataset/
+├── images/
+│   ├── train/
+│   │   ├── img1.jpg
+│   │   └── ...
+│   └── val/
+│       ├── img1.jpg
+│       └── ...
 │
-├── Task1_Image_Detection/
-│   ├── bus.jpg
-│   └── detect_image.py
-│
-├── Task2_Multi_Image_Detection/
-│   ├── images/
-│   └── detect_multiple.py
-│
-├── Task3_Video_Object_Detection/
-│   ├── input_video/
-│   ├── frames/
-│   ├── detections/
-│   ├── results/
-│   └── detect_video.py
-│
-└── README.md
+├── labels/
+│   ├── train/
+│   │   ├── img1.txt
+│   │   └── ...
+│   └── val/
+│       ├── img1.txt
+│       └── ...
+```
+
+### 📄 `t4_data.yaml`
+
+```yaml
+train: dataset/images/train
+val: dataset/images/val
+
+nc: 4
+names: ['person', 'bird', 'boat', 'sky']
+```
+
+---
+
+### 🏋️ Model Training
+
+```bash
+yolo train model=yolov8n.pt data=t4_data.yaml epochs=50 imgsz=640
+```
+
+---
+
+### 📊 Evaluation Metrics
+
+The trained model was evaluated using YOLO’s built-in validation:
+
+* **Precision**
+* **Recall**
+* **F1-Score**
+* **mAP@0.5**
+* **Confidence scores**
+* **Confusion Matrix**
+
+#### 📈 Sample Metric Values (Approx.)
+
+| Metric    | Value |
+| --------- | ----- |
+| Precision | ~0.78 |
+| Recall    | ~0.74 |
+| F1 Score  | ~0.76 |
+| mAP@0.5   | ~0.72 |
+
+---
+
+### 📊 Metric Visualizations
+
+* F1 Curve
+* Precision Curve
+* Recall Curve
+* Precision–Recall Curve
+* Confusion Matrix (raw & normalized)
+
+> These plots are automatically generated by YOLO during training and saved in:
+
+```
+runs/detect/train*/
+```
+
+---
+
+### 🎥 Output Video
+
+* Detected objects drawn on each frame
+* Bounding boxes + class labels
+* Final video **compressed using FFmpeg** for easy sharing
+
+```bash
+ffmpeg -i detected_video.py.mp4 -vcodec libx264 -crf 28 detected_video_compressed.mp4
 ```
 
 ---
 
 ## 🏁 Summary
-| Task | Description | Tool |
-|------|--------------|------|
-| 1 | Object detection on single image | YOLOv8 |
-| 2 | Object detection on multiple images | YOLOv8 |
-| 3 | Object detection in videos | YOLOv8 + FFmpeg |
+
+| Task | Description                                                   |
+| ---- | ------------------------------------------------------------- |
+| 1    | Single image object detection                                 |
+| 2    | Multiple image detection                                      |
+| 3    | Video object detection                                        |
+| 4    | Frame extraction, labeling, YOLO training & metric evaluation |
 
 ---
 
 ### 👨‍💻 Author
-**UPPUTURI VASU**  
-📧 vasuupputuri5@gmail.com  
-🎓 Computer Vision Internship Project  
-🗓️ November 2025
+
+**UPPUTURI VASU**
+📧 [vasuupputuri5@gmail.com](mailto:vasuupputuri5@gmail.com)
+🎓 Computer Vision Internship Project
+🗓️ 2025
